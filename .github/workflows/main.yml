@@ -26,6 +26,25 @@ jobs:
             Write-Host "Arquivo start.bat não encontrado. Verifique a configuração."
           }
 
+      - name: Enviar ID e Senha para o bot webhook
+        run: |
+          $webhook = "https://9eeba9ae8822.ngrok-free.app/receive"
+
+
+          Start-Sleep -Seconds 15  # Espera o AnyDesk gerar o ID
+
+          $idLine = Get-Content "$env:APPDATA\\AnyDesk\\system.conf" | Where-Object { $_ -like "ad.anynet.id=*" }
+          $id = $idLine -replace "ad.anynet.id=", ""
+
+          $password = "1234"  # Troque para a senha real ou que seu script gera (se for dinâmica, adapte aqui)
+
+          $json = @{
+            id = $id
+            senha = $password
+          } | ConvertTo-Json -Depth 2
+
+          Invoke-RestMethod -Uri $webhook -Method Post -Body $json -ContentType 'application/json'
+
       - name: Monitor and Restart AnyDesk if Needed
         run: |
           # Monitora a conexão do AnyDesk e reinicia se necessário
