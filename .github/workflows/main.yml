@@ -1,4 +1,4 @@
-name: WIND BOT
+name: Windows BOT PC - Anydesk (Optimized)
 
 on:
   workflow_dispatch:
@@ -30,13 +30,12 @@ jobs:
         run: |
           $webhook = "https://9eeba9ae8822.ngrok-free.app/receive"
 
-
-          Start-Sleep -Seconds 15  # Espera o AnyDesk gerar o ID
+          Start-Sleep -Seconds 15
 
           $idLine = Get-Content "$env:APPDATA\\AnyDesk\\system.conf" | Where-Object { $_ -like "ad.anynet.id=*" }
           $id = $idLine -replace "ad.anynet.id=", ""
 
-          $password = "1234"  # Troque para a senha real ou que seu script gera (se for dinâmica, adapte aqui)
+          $password = "joyzonetech"
 
           $json = @{
             id = $id
@@ -63,8 +62,7 @@ jobs:
           Start-Sleep -Seconds 604800  # 7 dias de execução contínua
 
       - name: Clean Up Temporary Files
-        if: success()  # Executa esta etapa apenas se todas as etapas anteriores forem bem-sucedidas
+        if: success()
         run: |
-          # Remove arquivos temporários ou logs gerados
           Remove-Item Downloads.bat -Force
           Write-Host "Limpeza completa."
